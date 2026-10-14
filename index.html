@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu thông tin căn cước công dân học sinh</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: flex-start;
+            padding: 15px; padding-top: 20px;
+        }
+        .container {
+            background: white; border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            padding: 25px 20px; max-width: 560px; width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn { from {opacity:0;transform:translateY(-20px);} to {opacity:1;transform:translateY(0);} }
+        .school-header {
+            text-align: center;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+        .urgent-banner {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            padding: 12px 10px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 6px 20px rgba(255,65,108,0.4);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 6px 20px rgba(255,65,108,0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 8px 28px rgba(255,65,108,0.7); }
+        }
+        .urgent-banner .urgent-title {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .urgent-banner .urgent-text {
+            font-size: 13.5px;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+        .urgent-banner .urgent-text .highlight-time {
+            background: #fff;
+            color: #ff416c;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 900;
+            display: inline-block;
+            margin: 2px 0;
+        }
+        .school-name { font-size: 14px; font-weight: 700; color: #333; line-height: 1.4; }
+        .school-name .highlight { color: #667eea; }
+        h1 { text-align: center; color: #333; font-size: 19px; margin-bottom: 4px; }
+        .subtitle { text-align: center; color: #888; font-size: 12px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 14px; }
+        label { display: block; font-weight: 600; color: #555; margin-bottom: 5px; font-size: 12.5px; }
+        input[type="text"] {
+            width: 100%; padding: 10px 13px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 14.5px; transition: all 0.3s ease;
+            background: #fafafa; color: #333; font-family: inherit;
+        }
+        input::placeholder { color: #aaa; font-style: italic; font-size: 13px; }
+        input:focus { outline: none; border-color: #667eea; background-color: white; box-shadow: 0 0 0 4px rgba(102,126,234,0.1); }
+        input:hover { border-color: #667eea; }
+        .section-title {
+            font-size: 13px; font-weight: 700; color: #667eea;
+            margin: 18px 0 10px 0; padding: 8px 10px;
+            background: linear-gradient(90deg, #f0f2ff, transparent);
+            border-left: 3px solid #667eea;
+            border-radius: 6px;
+        }
+        .radio-options { display: grid; gap: 8px; margin-top: 4px; }
+        .radio-options.cols-2 { grid-template-columns: 1fr 1fr; }
+        .radio-option { position: relative; }
+        .radio-option input[type="radio"] { display: none; }
+        .radio-option label {
+            display: flex; align-items: center; justify-content: center;
+            padding: 10px 6px; border: 2px solid #e0e0e0; border-radius: 10px;
+            cursor: pointer; font-size: 13px; font-weight: 600; color: #555;
+            transition: all 0.3s ease; background: #fafafa; margin: 0;
+            min-height: 44px; text-align: center;
+        }
+        .radio-option label:hover { border-color: #667eea; background: #f0f2ff; transform: translateY(-2px); }
+        .radio-option input[type="radio"]:checked + label {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; box-shadow: 0 5px 15px rgba(102,126,234,0.4); transform: scale(1.03);
+        }
+        .radio-option input[type="radio"]:checked + label::after { content: " ✓"; font-size: 13px; }
+        .btn-submit {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: 700; cursor: pointer;
+            transition: all 0.3s ease; margin-top: 20px; letter-spacing: 0.5px;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102,126,234,0.4); }
+        .btn-submit:disabled { opacity: 0.6; cursor: wait; transform: none; }
+        .btn-reset {
+            width: 100%; padding: 11px; background: #f0f0f0; color: #555;
+            border: none; border-radius: 10px; font-size: 14px;
+            cursor: pointer; transition: all 0.3s ease; margin-top: 8px;
+        }
+        .btn-reset:hover { background: #e0e0e0; }
+        .summary { display: none; margin-top: 20px; }
+        .summary.show { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from {opacity:0;transform:scale(0.96);} to {opacity:1;transform:scale(1);} }
+        .summary-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%);
+            border: 2px solid #667eea; border-radius: 14px; overflow: hidden;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.15);
+        }
+        .summary-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; text-align: center; padding: 14px 12px;
+        }
+        .summary-header .school { font-size: 12px; font-weight: 600; opacity: 0.95; line-height: 1.3; }
+        .summary-header .title { font-size: 15px; font-weight: 800; margin-top: 4px; letter-spacing: 0.5px; }
+        .summary-body { padding: 12px 14px 16px 14px; max-height: 65vh; overflow-y: auto; }
+        .summary-row {
+            display: flex; padding: 7px 0; border-bottom: 1px dashed #e0e4f5;
+            align-items: flex-start; font-size: 12.5px;
+        }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-row .key {
+            color: #667eea; font-weight: 700; width: 48%;
+            flex-shrink: 0; padding-right: 6px; line-height: 1.35;
+        }
+        .summary-row .value {
+            color: #222; font-weight: 600; flex: 1;
+            word-break: break-word; line-height: 1.35; text-align: right;
+        }
+        .summary-divider {
+            text-align: center; font-size: 11px; font-weight: 700;
+            color: #667eea; margin: 10px 0 6px 0; letter-spacing: 1px;
+        }
+        .summary-footer {
+            background: #f0f2ff; padding: 10px; text-align: center;
+            font-size: 10px; color: #667eea; font-weight: 600;
+            border-top: 1px solid #e0e4f5;
+        }
+        .btn-edit {
+            width: 100%; padding: 11px; background: #fff; color: #667eea;
+            border: 2px solid #667eea; border-radius: 10px; font-size: 14px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 12px;
+        }
+        .btn-edit:hover { background: #667eea; color: white; }
+        .status-toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            padding: 14px 24px; border-radius: 12px; color: white;
+            font-weight: 600; font-size: 14px; z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease;
+            display: flex; align-items: center; gap: 8px;
+            max-width: 90%;
+        }
+        .status-toast.show { transform: translateX(-50%) translateY(0); }
+        .status-toast.success { background: linear-gradient(135deg, #4CAF50, #45a049); }
+        .status-toast.error { background: linear-gradient(135deg, #f44336, #d32f2f); }
+        .status-toast.info { background: linear-gradient(135deg, #667eea, #764ba2); }
+        @media (max-width: 400px) {
+            .container { padding: 20px 15px; }
+            h1 { font-size: 17px; }
+            .urgent-banner .urgent-title { font-size: 19px; }
+            .urgent-banner .urgent-text { font-size: 12px; }
+            .summary-row { font-size: 12px; }
+            .summary-row .key { width: 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="school-header">
+            <div class="urgent-banner">
+                <div class="urgent-title">⚠️ KHẨN ⚠️</div>
+                <div class="urgent-text">
+                    Phụ huynh HOÀN THÀNH TRƯỚC<br>
+                    <span class="highlight-time">10 GIỜ SÁNG THỨ 5 NGÀY 15 THÁNG 10</span>
+                </div>
+            </div>
+            <div class="school-name">
+                🏫 Trường <span class="highlight">THCS Tây Thái Ninh</span> - Phân hiệu 1
+            </div>
+        </div>
+
+        <div id="formSection">
+            <h1>🪪 Phiếu thông tin căn cước công dân học sinh</h1>
+            <p class="subtitle">Vui lòng điền đầy đủ thông tin bên dưới</p>
+
+            <form id="certForm" novalidate>
+
+                <!-- ============ NHÓM 1: THÔNG TIN HỌC SINH ============ -->
+                <div class="section-title">👤 Thông tin học sinh</div>
+
+                <div class="form-group">
+                    <label for="hoTen">Họ và tên học sinh</label>
+                    <input type="text" id="hoTen" list="danhSachHocSinh" placeholder="Nhập hoặc chọn tên..." autocomplete="off">
+                    <datalist id="danhSachHocSinh">
+                        <option value="Trần Mai Anh"></option>
+                        <option value="Đặng Phương Chi"></option>
+                        <option value="Trần Nguyên Chi"></option>
+                        <option value="Bùi Quỳnh Chi"></option>
+                        <option value="Nguyễn Thị Chi"></option>
+                        <option value="Trần Hồng Cẩm"></option>
+                        <option value="Ngô Mạnh Cường"></option>
+                        <option value="Nguyễn Thành Đạt"></option>
+                        <option value="Bùi Hiền Dịu"></option>
+                        <option value="Nguyễn Thùy Dung"></option>
+                        <option value="Trần Đức Duy"></option>
+                        <option value="Bùi Gia Thịnh"></option>
+                        <option value="Nguyễn Trung Hiếu"></option>
+                        <option value="Bùi Đức Hiếu"></option>
+                        <option value="Bùi Minh Hòa"></option>
+                        <option value="Nguyễn Thái Hòa"></option>
+                        <option value="Lê Huy Hoàng"></option>
+                        <option value="Nguyễn Ngọc Hùng"></option>
+                        <option value="Bùi Đức Khánh"></option>
+                        <option value="Nguyễn Hoàng Ngọc Khánh"></option>
+                        <option value="Hoàng Khánh Long"></option>
+                        <option value="Bùi Khánh Ly"></option>
+                        <option value="Hà Trần Minh"></option>
+                        <option value="Đỗ Anh Minh"></option>
+                        <option value="Trần Đức Nam"></option>
+                        <option value="Nguyễn Hoàng Hải Nam"></option>
+                        <option value="Bùi Trung Nghĩa"></option>
+                        <option value="Nguyễn Thị Bảo Ngọc"></option>
+                        <option value="Bùi Ngọc Nhi"></option>
+                        <option value="Bùi Mai Dy Niên"></option>
+                        <option value="Trần Minh Phương"></option>
+                        <option value="Trần Đại Quang"></option>
+                        <option value="Nguyễn Thị Lệ Quyên"></option>
+                        <option value="Trần Diễm Quỳnh"></option>
+                        <option value="Bùi Nguyễn Tuệ Sam"></option>
+                        <option value="Lê Tiến Tài"></option>
+                        <option value="Nguyễn Trung Thành"></option>
+                        <option value="Trần Đức Thắng"></option>
+                        <option value="Bùi Đức Tiến"></option>
+                        <option value="Ngô Xuân Tùng"></option>
+                    </datalist>
+                </div>
+
+                <!-- ============ NHÓM 2: ĐỊNH DANH MỨC 2 ============ -->
+                <div class="section-title">🔐 Căn cước đã định danh mức 2 chưa?</div>
+
+                <div class="form-group">
+                    <label>Trạng thái định danh mức 2</label>
+                    <div class="radio-options cols-2" id="dinhDanhOptions">
+                        <div class="radio-option">
+                            <input type="radio" id="ddDaLam" name="dinhDanh" value="Đã định danh mức 2">
+                            <label for="ddDaLam">✅ Đã định danh</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="ddChuaLam" name="dinhDanh" value="Chưa định danh mức 2">
+                            <label for="ddChuaLam">❌ Chưa định danh</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ NHÓM 3: ẢNH KHUÔN MẶT ============ -->
+                <div class="section-title">📸 Trên căn cước có ảnh khuôn mặt chưa?</div>
+
+                <div class="form-group">
+                    <label>Trạng thái ảnh khuôn mặt trên căn cước</label>
+                    <div class="radio-options cols-2" id="anhMatOptions">
+                        <div class="radio-option">
+                            <input type="radio" id="anhCoRoi" name="anhMat" value="Có ảnh khuôn mặt">
+                            <label for="anhCoRoi">✅ Có rồi</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="anhChuaCo" name="anhMat" value="Chưa có ảnh khuôn mặt">
+                            <label for="anhChuaCo">❌ Chưa có</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btnSubmit">✅ XÁC NHẬN</button>
+                <button type="reset" class="btn-reset">🔄 Làm mới</button>
+            </form>
+        </div>
+
+        <!-- ===== BẢNG TỔNG HỢP ===== -->
+        <div class="summary" id="summarySection">
+            <div class="summary-card">
+                <div class="summary-header">
+                    <div class="school">TRƯỜNG THCS TÂY THÁI NINH - PHÂN HIỆU 1</div>
+                    <div class="title">PHIẾU THÔNG TIN CĂN CƯỚC CÔNG DÂN HỌC SINH</div>
+                </div>
+                <div class="summary-body" id="summaryBody"></div>
+                <div class="summary-footer">
+                    ✅ Đã gửi thành công - Chụp màn hình để lưu lại
+                </div>
+            </div>
+            <button class="btn-edit" id="btnEdit">✏️ Chỉnh sửa lại</button>
+        </div>
+    </div>
+
+    <div class="status-toast" id="toast"></div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4TTy-_yKkMJm0cssPM7RVCdNJNTLyA56U9Og3bF-V5b8CK7HmGbCYQsUWdBWhb3S3/exec';
+
+        const FIELDS = [
+            { id: 'hoTen',    label: 'Họ và tên học sinh',              group: 'hs' },
+            { id: 'dinhDanh', label: 'Căn cước đã định danh mức 2 chưa', group: 'dd' },
+            { id: 'anhMat',   label: 'Trên căn cước có ảnh khuôn mặt chưa', group: 'anh' }
+        ];
+
+        const GROUP_LABELS = {
+            hs:  '👤 THÔNG TIN HỌC SINH',
+            dd:  '🔐 ĐỊNH DANH MỨC 2',
+            anh: '📸 ẢNH KHUÔN MẶT'
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('certForm');
+            const formSection = document.getElementById('formSection');
+            const summarySection = document.getElementById('summarySection');
+            const summaryBody = document.getElementById('summaryBody');
+            const btnEdit = document.getElementById('btnEdit');
+            const btnSubmit = document.getElementById('btnSubmit');
+            const toast = document.getElementById('toast');
+
+            function showToast(message, type) {
+                toast.textContent = message;
+                toast.className = 'status-toast ' + type + ' show';
+                setTimeout(() => { toast.classList.remove('show'); }, 3500);
+            }
+
+            // ---- SUBMIT ----
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const hoTen = document.getElementById('hoTen').value.trim();
+                if (!hoTen) {
+                    showToast('⚠️ Vui lòng nhập họ tên học sinh!', 'error');
+                    return;
+                }
+
+                let dinhDanhValue = '';
+                document.querySelectorAll('input[name="dinhDanh"]').forEach(r => {
+                    if (r.checked) dinhDanhValue = r.value;
+                });
+
+                let anhMatValue = '';
+                document.querySelectorAll('input[name="anhMat"]').forEach(r => {
+                    if (r.checked) anhMatValue = r.value;
+                });
+
+                if (!dinhDanhValue) {
+                    showToast('⚠️ Vui lòng chọn trạng thái định danh mức 2!', 'error');
+                    return;
+                }
+                if (!anhMatValue) {
+                    showToast('⚠️ Vui lòng chọn trạng thái ảnh khuôn mặt!', 'error');
+                    return;
+                }
+
+                const data = {
+                    hoTen: hoTen,
+                    dinhDanh: dinhDanhValue,
+                    anhMat: anhMatValue
+                };
+
+                // Bảng tổng hợp
+                summaryBody.innerHTML = '';
+                let currentGroup = null;
+                FIELDS.forEach(f => {
+                    if (f.group !== currentGroup) {
+                        currentGroup = f.group;
+                        const divider = document.createElement('div');
+                        divider.className = 'summary-divider';
+                        divider.textContent = GROUP_LABELS[f.group];
+                        summaryBody.appendChild(divider);
+                    }
+                    const row = document.createElement('div');
+                    row.className = 'summary-row';
+                    const val = data[f.id] ? data[f.id] : '—';
+                    row.innerHTML = `<div class="key">${f.label}:</div><div class="value">${val}</div>`;
+                    summaryBody.appendChild(row);
+                });
+
+                btnSubmit.disabled = true;
+                btnSubmit.textContent = '⏳ Đang gửi...';
+                showToast('⏳ Đang gửi dữ liệu...', 'info');
+
+                try {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify(data)
+                    });
+
+                    formSection.style.display = 'none';
+                    summarySection.classList.add('show');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    showToast('✅ Đã gửi thông tin thành công!', 'success');
+
+                } catch (err) {
+                    showToast('❌ Lỗi kết nối. Vui lòng kiểm tra mạng!', 'error');
+                    console.error(err);
+                } finally {
+                    btnSubmit.disabled = false;
+                    btnSubmit.textContent = '✅ XÁC NHẬN';
+                }
+            });
+
+            // ---- Nút chỉnh sửa lại ----
+            btnEdit.addEventListener('click', function () {
+                summarySection.classList.remove('show');
+                formSection.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
